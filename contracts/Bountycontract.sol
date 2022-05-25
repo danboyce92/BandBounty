@@ -61,8 +61,9 @@ contract Bounty is Modifiers {
         payable (msg.sender).transfer(balances[msg.sender]);
     }
 
-    function enterVipList( string memory name) public greenOnly {
+    function enterVipList(string memory name) public greenOnly {
         require(balances[msg.sender] >= vipContribution, "Must contribute enough for VIP pass"); 
+        require(vipCounter < 101, "Vip List full");
 
         vipID[msg.sender] = name;
         
@@ -70,13 +71,17 @@ contract Bounty is Modifiers {
         vipCounter++;
     }
 
-    function vipAddressChecker(uint num) public view returns(address) {
-        return vipAddresses[num];
-    }
+        function vipAddressChecker(uint num) private view returns(address) {
+            return vipAddresses[num];
+        }
 
-    function vipNameChecker(address vip) public view returns(string memory) {
-        return vipID[vip];
-    }
+        function vipNameChecker(address vip) private view returns(string memory) {
+            return vipID[vip];
+        }
+
+        function vipListNames(uint num) public view returns(string memory) {
+            return vipNameChecker(vipAddressChecker(num));
+        }
 
 }
 
