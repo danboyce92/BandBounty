@@ -8,9 +8,14 @@ contract Bounty is Modifiers {
 
     mapping(address => uint256) public contributors;
     mapping(address => bool) public vipContributors;
+    mapping(address => string) public vipID;
+    mapping(address => uint) balances;
+
     uint public contributorsCount;
     uint minimumContribution = 100;
     uint vipContribution = 1000;
+    uint vipCounter = 0;
+    address[101] vipAddresses;
 
     constructor() {
         manager = msg.sender;
@@ -19,7 +24,8 @@ contract Bounty is Modifiers {
 
 
     function setState(uint _state) public onlyOwner {
-        state = _state;        
+        state = _state;
+        // 0 = Red, 1 = Yellow, 2 = Green        
         
     }
 
@@ -39,6 +45,9 @@ contract Bounty is Modifiers {
             vipContributors[msg.sender] = true;
         }
 
+        //Add contribution to user balances
+        balances[msg.sender] += msg.value;
+
     }
 
     function getFunds() public view returns (uint){
@@ -46,10 +55,30 @@ contract Bounty is Modifiers {
     }
 
 
-    function refund() public view redOnly returns(address) {
-        return msg.sender;
+    function refund() public redOnly payable {
+        require(balances[msg.sender] > 0, "Must have contributed to get a refund");
+
+        payable (msg.sender).transfer(balances[msg.sender]);
     }
 
+    function enterVipList( string memory name) public greenOnly {
+        require(balances[msg.sender] >= vipContribution, "Must contribute enough for VIP pass"); 
 
+        vipID[msg.sender] = name;
+        
+        vipAddresses[vipCounter] = msg.sender;
+        vipCounter++;
+    }
+
+    function vipAddressChecker(uint num) public view returns(address) {
+        return vipAddresses[num];
+    }
+
+    function vipNameChecker(address vip) public view returns(string memory) {
+        return vipID[vip];
+    }
 
 }
+
+
+//array[index] = value

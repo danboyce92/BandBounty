@@ -5,7 +5,7 @@ pragma solidity <0.9.0;
 contract Modifiers {
 
     address manager;
-    uint state;
+    uint public state;
 
 
  modifier onlyOwner() {

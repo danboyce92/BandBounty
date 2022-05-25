@@ -11,11 +11,34 @@ contract("Bounty", (accounts) => {
     })
 
     it("ensures that contribute function sends contribution", async () => {
-        await instance.contribute({from: accounts[0], value: 101})
+        await instance.contribute({from: accounts[0], value: 1100})
 
         let funds = await instance.getFunds()
 
-        assert.equal(funds, 101, "The transaction was successful")
+        assert.equal(funds, 1100, "The transaction was successful")
+    })
+
+    it("ensures state is yellow after deployment", async () => {
+        let state = await instance.state()
+        assert.equal(state, 1, "State is Yellow")
+
+    })
+
+    it("ensures that vipName gets saved to vipList", async () => {
+        
+        await instance.setState(2)
+        await instance.contribute({from: accounts[0], value: 1100})
+
+       
+
+        await instance.enterVipList("David", {
+            from: accounts[0],
+        })
+
+        let vipId = await instance.vipID(accounts[0])
+
+        assert.equal(vipId, "David", "The name was saved to the list")
+
     })
 
 });
