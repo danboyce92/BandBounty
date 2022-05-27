@@ -16,6 +16,7 @@ contract Bounty is Modifiers {
     uint vipContribution = 1000;
     uint vipCounter = 0;
     address[101] vipAddresses;
+    string[] vipNames;
 
     constructor() {
         manager = msg.sender;
@@ -66,7 +67,7 @@ contract Bounty is Modifiers {
         require(vipCounter < 101, "Vip List full");
 
         vipID[msg.sender] = name;
-        
+        vipNames.push(name);
         vipAddresses[vipCounter] = msg.sender;
         vipCounter++;
     }
@@ -81,6 +82,10 @@ contract Bounty is Modifiers {
 
         function vipListNames(uint num) public view returns(string memory) {
             return vipNameChecker(vipAddressChecker(num));
+        }
+
+        function getVipNames() public view returns(string[] memory) {
+            return vipNames;
         }
 
 }
