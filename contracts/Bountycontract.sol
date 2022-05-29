@@ -19,6 +19,7 @@ contract Bounty is Modifiers {
     address[101] vipAddresses;
     string[] vipNames;
     uint depFee;
+    uint deploymentTime;
     
 
 
@@ -26,16 +27,9 @@ contract Bounty is Modifiers {
     constructor(address manager) payable {
         manager = msg.sender;
         state = 1;
-        //setupFee = depFee;
+        deploymentTime = block.timestamp;
         
     }
-
-    /*function retrieveAdmin(address _test) external {
-        _test.delegateCall(
-            abi.encodeWithSelector(BountyFactory.retrieveAdmin.selector)
-        );
-
-    }*/
 
 
     function setState(uint _state) public onlyOwner {
@@ -50,6 +44,10 @@ contract Bounty is Modifiers {
 
     function contribute() public payable notRed {
         require(msg.value >= minimumContribution);
+
+        if(block.timestamp > deploymentTime + 90 days) {
+            state = 0;
+        }
         
         if(contributors[msg.sender] == 0) {
         contributorsCount++;

@@ -28,4 +28,8 @@ contract Modifiers {
         _;
     }
 
+    modifier timeExp() {
+        require(block.timestamp < deploymentTime + 90 days && state = 1);
+    }
+
 }
