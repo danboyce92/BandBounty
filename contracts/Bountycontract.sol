@@ -4,6 +4,7 @@ pragma solidity <0.9.0;
 
 import './ModifiersContract.sol';
 
+
 contract Bounty is Modifiers {
 
     mapping(address => uint256) public contributors;
@@ -17,11 +18,24 @@ contract Bounty is Modifiers {
     uint vipCounter = 0;
     address[101] vipAddresses;
     string[] vipNames;
+    uint depFee;
+    
 
-    constructor() {
+
+
+    constructor(address manager) payable {
         manager = msg.sender;
         state = 1;
+        //setupFee = depFee;
+        
     }
+
+    /*function retrieveAdmin(address _test) external {
+        _test.delegateCall(
+            abi.encodeWithSelector(BountyFactory.retrieveAdmin.selector)
+        );
+
+    }*/
 
 
     function setState(uint _state) public onlyOwner {
@@ -35,7 +49,7 @@ contract Bounty is Modifiers {
     }
 
     function contribute() public payable notRed {
-        require(msg.value > minimumContribution);
+        require(msg.value >= minimumContribution);
         
         if(contributors[msg.sender] == 0) {
         contributorsCount++;
@@ -80,11 +94,11 @@ contract Bounty is Modifiers {
             return vipID[vip];
         }
 
-        function vipListNames(uint num) public view returns(string memory) {
+        function vipListNames(uint num) public view onlyOwner returns(string memory) {
             return vipNameChecker(vipAddressChecker(num));
         }
 
-        function getVipNames() public view returns(string[] memory) {
+        function getVipNames() public view onlyOwner returns(string[] memory) {
             return vipNames;
         }
 
@@ -92,3 +106,4 @@ contract Bounty is Modifiers {
 
 
 //array[index] = value
+// would it be possible to make a simple function that retrieves the msg.sender address from contract A 
