@@ -8,11 +8,11 @@ setState should only be accessible by the admin. Because each contract is deploy
 
 ## **Red, Yellow and Green States**
 Using modifiers, some functions can be restricted depending on what state they need to be in in order for the function run. 
-### Red----------------------------
+### Red ----------------------------
  indicates that the Bounty is void because it has either run out of time or the band has declined. This state deactivates the contribute function and activates the refund function.
-### Yellow-------------------------
+### Yellow -------------------------
  indicates that the bounty is currently in the contribution phase, this state will either expire and turn to the Red state after 90 days or be green lit by having the band accept and having set a target
-### Green--------------------------
+### Green --------------------------
  indicates that the bounty has been green lit by the band and has the potential to go ahead. If a project is green lit, the possibility of adding vip tickets becomes available. If a band has agreed to such things, meet + greets, attending soundchecks etc, can be added to increase the chance of reaching the target required for the show to go ahead. After 90 days, if the target hasn't been met the bounty should expire and the state should change to red.
 
 ## **How do I incorporate time?**
