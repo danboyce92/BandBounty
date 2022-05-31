@@ -32,6 +32,14 @@ contract Bounty is Modifiers {
     }
 
 
+    /*function retrieveAdmin(address _test) external {
+        _test.delegateCall(
+            abi.encodeWithSelector(BountyFactory.retrieveAdmin.selector)
+        );
+
+    }*/
+
+
     function setState(uint _state) public onlyOwner {
         state = _state;
         // 0 = Red, 1 = Yellow, 2 = Green        
@@ -42,10 +50,13 @@ contract Bounty is Modifiers {
         return state;
     }
 
+
     function contribute() public payable notRed {
         require(msg.value >= minimumContribution);
+        uint expirationTime = deploymentTime + 90 days;
+        uint currentTime = block.timestamp;
 
-        if(block.timestamp > deploymentTime + 90 days) {
+        if(currentTime > expirationTime && state == 1) {
             state = 0;
         }
         
