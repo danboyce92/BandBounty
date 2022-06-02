@@ -20,6 +20,7 @@ contract Bounty is Modifiers {
     string[] vipNames;
     uint depFee;
     uint deploymentTime;
+    uint setStateCounter;
     
 
 
@@ -28,6 +29,7 @@ contract Bounty is Modifiers {
         manager = msg.sender;
         state = 1;
         deploymentTime = block.timestamp;
+        setStateCounter = 0;
         
     }
 
@@ -41,9 +43,16 @@ contract Bounty is Modifiers {
 
 
     function setState(uint _state) public onlyOwner {
+        require(setStateCounter == 0, "State can only be changed once");
+
         state = _state;
-        // 0 = Red, 1 = Yellow, 2 = Green        
-        
+        // 0 = Red, 1 = Yellow, 2 = Green  
+
+        if(_state == 2){
+            deploymentTime = block.timestamp;
+        }    
+
+        setStateCounter++;
     }
 
     function checkState() public view onlyOwner returns(uint) {
