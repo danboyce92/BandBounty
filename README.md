@@ -25,6 +25,15 @@ Timing in contribution function appears to be fixed, add some tests to verify th
 Getting a price feed oracle set up is important if I want to be able to set the contribution prices to a set number like for example 50$ for a standard ticket, 100$ for a vip etc.
 Right now they contribute a fixed number of wei, change this.
 
+Function reverts..
+
+call to Bounty.getTicketFee errored: VM error: revert.
+
+revert
+	The transaction has been reverted to the initial state.
+Note: The called function should be payable if you send value and the value you send should be less than your current balance.
+Debug the transaction to get more information.
+
 _________________________________
 
 ### Processing

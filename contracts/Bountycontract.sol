@@ -2,10 +2,14 @@
 
 pragma solidity <0.9.0;
 
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
 import './ModifiersContract.sol';
 
 
 contract Bounty is Modifiers {
+
+    AggregatorV3Interface internal priceFeed;
 
     mapping(address => uint256) public contributors;
     mapping(address => bool) public vipContributors;
@@ -20,6 +24,7 @@ contract Bounty is Modifiers {
     string[] vipNames;
     uint depFee;
     uint deploymentTime;
+    uint256 standardTicketPrice;
     
 
 
@@ -28,8 +33,19 @@ contract Bounty is Modifiers {
         manager = msg.sender;
         state = 1;
         deploymentTime = block.timestamp;
+        standardTicketPrice = 50 * (10 ** 18);
+        priceFeed = AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
         
     }
+
+
+    function getTicketFee() public view returns (uint256) {
+        (, int256 price, , ,) = priceFeed.latestRoundData();
+        uint256 adjustedPrice = uint256(price) * 10 ** 10;
+
+        uint256 costOfTicket = (standardTicketPrice * 10 ** 18) / adjustedPrice;
+        return costOfTicket;
+            }
 
 
     /*function retrieveAdmin(address _test) external {
