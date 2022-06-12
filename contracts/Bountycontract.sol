@@ -25,6 +25,7 @@ contract Bounty is Modifiers {
     uint depFee;
     uint deploymentTime;
     uint256 standardTicketPrice;
+    uint setStateCounter;
     
 
 
@@ -35,6 +36,7 @@ contract Bounty is Modifiers {
         deploymentTime = block.timestamp;
         standardTicketPrice = 50 * (10 ** 18);
         priceFeed = AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
+        setStateCounter = 0;
         
     }
 
@@ -57,9 +59,16 @@ contract Bounty is Modifiers {
 
 
     function setState(uint _state) public onlyOwner {
+        require(setStateCounter == 0, "State can only be changed once");
+
         state = _state;
-        // 0 = Red, 1 = Yellow, 2 = Green        
-        
+        // 0 = Red, 1 = Yellow, 2 = Green  
+
+        if(_state == 2){
+            deploymentTime = block.timestamp;
+        }    
+
+        setStateCounter++;
     }
 
     function checkState() public view onlyOwner returns(uint) {

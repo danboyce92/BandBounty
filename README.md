@@ -41,6 +41,8 @@ _________________________________
 #### Target complete
 Need to set target, need to set trigger to red state if target is not met within time limit, and also need to protect from red state if target is met within time limit.
 
+Should setState be protected with a uint or a bool? Which is cheaper?
+
 __________________________________
 
 ### Things beyond the scope of this project.
